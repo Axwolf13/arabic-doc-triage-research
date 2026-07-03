@@ -1,0 +1,13 @@
+torch
+transformers
+sentencepiece
+surya-ocr
+datasets
+sacrebleu
+jiwer
+opencv-python
+matplotlib
+pandas
+numpy
+jupyterlab
+# paddleocr + paddlepaddle live in a separate env, see notebook 15
