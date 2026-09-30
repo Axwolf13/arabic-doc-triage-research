@@ -53,14 +53,6 @@ Run notebooks in order; later ones load cached outputs from earlier ones where p
 
 Handwritten Arabic remains out of reach for every engine tested; the honest recommendation is typed-document triage with human escalation for handwriting. BLEU against FLORES references understates LLM-style translators (see notebook 10). The 50-sample KITAB-Bench subset is large enough to expose failure modes, not to certify accuracy. And one adversarial sample beats all four safety signals, so nothing here supports removing the human from the loop, which is the design conclusion, not a caveat.
 
-## Corrections (September 2026)
-
-Rechecking every number here against the notebooks' saved outputs turned up three errors. None changes a conclusion.
-
-- **Usable OCR samples:** this said 31 of 50 reach CER ≤ 10%. It's 39 of 50; 31 is the count at CER ≤ 5% (notebook 07's own distribution, recomputed from `surya_50_outputs.json`).
-- **The 35x:** this said the OCR-then-translate cascade runs at 35x less compute. The 35x is TranslateGemma against Opus-MT on the same five sentences (248 s against 7 s). The TranslateGemma cascade was slower than its end-to-end mode (248 s against 140 s). The case for the cascade is auditability, not speed.
-- **Preprocessing:** this said deskew plus CLAHE wins back about a third of the lost quality. Degradation cost 6.0 CER points (1.6% to 7.6%) and preprocessing recovered 2.7 of them, almost half.
-
 ---
 
 Akshay Ashok · [axwolf13.github.io](https://axwolf13.github.io/) · akshay57ax@gmail.com
