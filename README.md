@@ -14,7 +14,7 @@ This research grew out of a feasibility case study with [lingomatch GmbH](https:
 **OCR: measure the confidence, not just the accuracy.**
 - Surya OCR evaluated on 50 KITAB-Bench samples (notebook 07) with per-sample CER/WER: 39 of 50 samples reach usable quality (CER ≤ 10%), 31 of them at CER ≤ 5%, with failures concentrated in degraded scans and stylized fonts.
 - Surya's own confidence score actually predicts its failures (notebook 12): a document-level confidence router flagged 4 of 4 catastrophic OCR failures, the basis for an automatic "call a human interpreter" escalation path. Applied to all 50 stored outputs at the same threshold (`notebooks/router_check.py`), it flags all 5 samples above 30% CER and 9 of the 11 above 10%, with one false alarm.
-- Defense in depth for the failures confidence misses: perplexity scoring with a diacritic confound found and fixed (13), script-ratio and repetition heuristics that catch hallucination loops (14) and PaddleOCR as an independent second engine for disagreement-based flagging (15). One adversarial sample evades all four signals, which is the empirical argument that human review stays mandatory.
+- Defense in depth for the failures confidence misses: perplexity scoring with a diacritic confound found and fixed (13) and script-ratio and repetition heuristics that catch hallucination loops (14). PaddleOCR as a second engine (15) doesn't make a usable flag: on the 14 samples Surya read perfectly it still disagrees by 39 to 95%, so a disagreement can't separate Surya's errors from PaddleOCR's own. One adversarial sample evades every signal, which is the empirical argument that human review stays mandatory.
 - Phone photos in the field are skewed and shadowed: projection-profile deskew plus CLAHE contrast recovery (notebook 16) wins back almost half of the OCR quality lost to degradation (CER 7.6% down to 4.9% on a multi-line Arabic page that scores 1.6% clean).
 
 ## Notebook index
@@ -33,7 +33,7 @@ This research grew out of a feasibility case study with [lingomatch GmbH](https:
 | 12 | confidence_router | document-level router flags 4/4 catastrophic OCR failures (5/5 over all 50 samples, `router_check.py`) |
 | 13 | perplexity_signal | second safety signal; diacritic confound found and fixed |
 | 14 | heuristic_guardrails | script-ratio + repetition heuristics patch the remaining blind spots |
-| 15 | paddleocr | independent second engine, model-disagreement flagging |
+| 15 | paddleocr | second engine: disagrees with Surya by 39 to 95% even on perfect reads, so not a usable flag |
 | 16 | degradation_preprocessing | deskew + CLAHE: CER 7.6% down to 4.9% on degraded input |
 
 `surya_50_outputs.json` and `paddle_50_outputs.json` hold both engines' raw outputs on the same 50 KITAB-Bench samples, so the disagreement analysis is reproducible without re-running either engine.
